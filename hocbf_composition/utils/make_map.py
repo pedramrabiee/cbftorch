@@ -1,4 +1,4 @@
-from attrdict import AttrDict
+from box import Box as AD
 from hocbf_composition.barriers.barrier import Barrier
 from hocbf_composition.barriers.composite_barrier import SoftCompositionBarrier, NonSmoothCompositionBarrier
 from hocbf_composition.utils.utils import *
@@ -7,9 +7,9 @@ import cv2
 
 class Map:
     def __init__(self, barriers_info, dynamics, cfg):
-        self.barriers_info = AttrDict(barriers_info)
+        self.barriers_info = AD(barriers_info)
         self.dynamics = dynamics
-        self.cfg = AttrDict(cfg)
+        self.cfg = AD(cfg)
         self.pos_barriers = None
         self.vel_barriers = None
         self.make_barrier_from_map()

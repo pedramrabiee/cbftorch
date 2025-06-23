@@ -1,6 +1,6 @@
 
 
-from attrdict import AttrDict as AD
+from box import Box as AD
 import matplotlib as mpl
 from math import pi
 from hocbf_composition.examples.backup_examples.inv_pend.inv_pend_dynamics import InvertPendDynamics

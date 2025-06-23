@@ -1,7 +1,7 @@
 from hocbf_composition.utils.utils import *
 import torch
 from torch.nn.functional import softplus, relu
-from attrdict import AttrDict
+from box import Box as AD
 from hocbf_composition.utils.dynamics import AffineInControlDynamics
 from hocbf_composition.barriers.composite_barrier import SoftCompositionBarrier
 from hocbf_composition.safe_controls.base_safe_control import BaseSafeControl, BaseMinIntervSafeControl
@@ -15,7 +15,7 @@ class CFSafeControl(BaseSafeControl):
     def __init__(self, action_dim, alpha=None, params=None):
         super().__init__(action_dim, alpha, params)
         self._action_dim = action_dim
-        update_dict_no_overwrite(self._params, AttrDict(slack_gain=1e24,
+        update_dict_no_overwrite(self._params, AD(slack_gain=1e24,
                                                         use_softplus=False,
                                                         softplus_gain=2.0))
 
@@ -155,7 +155,7 @@ class InputConstCFSafeControl(CFSafeControl):
         # Remake action barriers witht the augmented dynamics
         self._ac_barrier = [barrier.assign_dynamics(self._dynamics) for barrier in self._ac_barrier]
         self._barrier = (SoftCompositionBarrier(
-            cfg=AttrDict(softmin_rho=self._params.softmin_rho,
+            cfg=AD(softmin_rho=self._params.softmin_rho,
                          softmax_rho=self._params.softmax_rho)).assign_dynamics(
             self._dynamics).assign_barriers_and_rule(
             barriers=[*self._state_barrier, *self._ac_barrier], rule='i'))

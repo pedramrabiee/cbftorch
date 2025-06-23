@@ -1,4 +1,4 @@
-from attrdict import AttrDict as AD
+from box import Box as AD
 
 # Make map_ configuration
 map_config = dict(

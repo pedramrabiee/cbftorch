@@ -1,4 +1,4 @@
-from attrdict import AttrDict as AD
+from box import Box as AD
 from math import pi
 from hocbf_composition.utils.utils import *
 

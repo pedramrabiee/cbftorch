@@ -1,4 +1,4 @@
-from attrdict import AttrDict as AD
+from box import Box as AD
 import os
 
 # Make map_ configuration

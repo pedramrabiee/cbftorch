@@ -1,5 +1,5 @@
 from hocbf_composition.utils.utils import *
-from attrdict import AttrDict as AD
+from box import Box as AD
 
 
 class BaseSafeControl:

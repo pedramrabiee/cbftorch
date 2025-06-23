@@ -4,7 +4,7 @@ from hocbf_composition.examples.unicycle.unicycle_dynamics import UnicycleDynami
 from hocbf_composition.utils.dynamics import LowPassFilterDynamics
 from hocbf_composition.barriers.barrier import Barrier
 from hocbf_composition.safe_controls.closed_form_safe_control import MinIntervInputConstCFSafeControl
-from attrdict import AttrDict as AD
+from box import Box as AD
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 from math import pi

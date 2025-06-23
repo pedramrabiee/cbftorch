@@ -1,4 +1,4 @@
-from attrdict import AttrDict as AD
+from box import Box as AD
 import matplotlib as mpl
 
 from hocbf_composition.examples.backup_examples.unicycle.unicycle_dynamic import UnicycleReducedOrderDynamics
