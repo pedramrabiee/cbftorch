@@ -1,10 +1,87 @@
-## Higher-Order Barrier Function Composition Library
+# CBFTorch: Control Barrier Functions in PyTorch
+
+[![PyPI version](https://badge.fury.io/py/cbftorch.svg)](https://badge.fury.io/py/cbftorch)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 <p align="center">
-  <img src="hocbf_composition/examples/unicycle/figs/01_Trajectories_CF_Safe_Control_Multi_Trajs_300dpi.png" alt="Trajectory Plots" width="600">
+  <img src="https://raw.githubusercontent.com/pedramrabiee/cbftorch/main/examples/unicycle/figs/01_Trajectories_CF_Safe_Control_Multi_Trajs_300dpi.png" alt="Trajectory Plots" width="600">
 </p>
 
-This repository provides implementations of barrier functions and higher-order composition barrier functions for control and safety in dynamical systems. It includes classes for basic barrier functions, composition of barrier functions, soft composition, and non-smooth composition.
+CBFTorch is a PyTorch-based library for implementing Control Barrier Functions (CBFs) and higher-order CBFs for safe control of dynamical systems. It provides a flexible and efficient framework for constructing safety filters using barrier functions with closed-form solutions.
+
+## Installation
+
+### Quick Install
+
+```bash
+pip install cbftorch
+```
+
+### Prerequisites
+
+CBFTorch requires PyTorch. Since PyTorch installation depends on your system's CUDA version, you may need to install it separately:
+
+**For CUDA 12.4 (latest):**
+```bash
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
+pip install cbftorch
+```
+
+**For CUDA 11.8:**
+```bash
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+pip install cbftorch
+```
+
+**For CPU only:**
+```bash
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+pip install cbftorch
+```
+
+### Development Installation
+
+For development, clone the repository and install in editable mode:
+
+```bash
+git clone https://github.com/pedramrabiee/cbftorch.git
+cd cbftorch
+pip install -e .
+```
+
+### Conda Environment
+
+For a complete environment setup, use the provided `environment.yml`:
+
+```bash
+git clone https://github.com/pedramrabiee/cbftorch.git
+cd cbftorch
+conda env create -f environment.yml
+conda activate cbftorch
+```
+
+### System Dependencies
+
+For full functionality (including LaTeX rendering in plots), install:
+
+**Ubuntu/Debian:**
+```bash
+sudo apt-get install texlive-latex-base texlive-latex-extra dvipng
+```
+
+**macOS:**
+```bash
+brew install --cask mactex
+```
+
+## Features
+
+- **Control Barrier Functions**: Implementation of CBFs with automatic differentiation
+- **Higher-Order CBFs**: Support for systems with high relative degree
+- **Barrier Composition**: Smooth and non-smooth composition of multiple barriers
+- **Closed-Form Solutions**: Efficient closed-form safe control synthesis
+- **PyTorch Integration**: GPU acceleration and automatic differentiation
+- **Input Constraints**: Handle control input limits through augmented dynamics
 
 ### Barrier Class
 
@@ -102,8 +179,8 @@ The Unicycle example demonstrates the use of higher-order composition barrier fu
 Example code snippet:
 
 ```python
-from hocbf_composition.examples.unicycle.unicycle_dynamics import UnicycleDynamics
-from hocbf_composition.utils.make_map import Map
+from cbftorch import Barrier, SoftCompositionBarrier, MinIntervCFSafeControl
+from cbftorch.utils.dynamics import AffineInControlDynamics
 
 # Instantiate dynamics
 dynamics = UnicycleDynamics(state_dim=4, action_dim=2)
