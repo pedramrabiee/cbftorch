@@ -1,7 +1,7 @@
 from box import Box as AD
 import matplotlib as mpl
 from math import pi
-from bicycle_dynamics import BicycleDynamics
+from cbftorch.dynamics import BicycleDynamics
 from cbftorch.utils.make_map import Map
 from cbftorch.safe_controls.closed_form_safe_control import MinIntervCFSafeControl
 from map_config import map_config

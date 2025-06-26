@@ -28,7 +28,16 @@ from .safe_controls.closed_form_safe_control import (
 from .safe_controls.qp_safe_control import QPSafeControl
 from .safe_controls.backup_safe_control import BackupSafeControl
 
-from .utils.dynamics import AffineInControlDynamics
+from .dynamics import (
+    AffineInControlDynamics,
+    LowPassFilterDynamics,
+    UnicycleDynamics,
+    BicycleDynamics,
+    DIDynamics,
+    SIDynamics,
+    UnicycleReducedOrderDynamics,
+    InvertPendDynamics
+)
 
 __all__ = [
     # Version info
@@ -52,6 +61,13 @@ __all__ = [
     "QPSafeControl",
     "BackupSafeControl",
     
-    # Utils
+    # Dynamics
     "AffineInControlDynamics",
+    "LowPassFilterDynamics",
+    "UnicycleDynamics",
+    "BicycleDynamics",
+    "DIDynamics",
+    "SIDynamics",
+    "UnicycleReducedOrderDynamics",
+    "InvertPendDynamics",
 ]

@@ -1,5 +1,6 @@
 import torch
-from cbftorch.utils.dynamics import AffineInControlDynamics
+from .base import AffineInControlDynamics
+
 
 class SIDynamics(AffineInControlDynamics):
     def _f(self, x):
@@ -7,8 +8,3 @@ class SIDynamics(AffineInControlDynamics):
 
     def _g(self, x):
         return torch.eye(2, dtype=torch.float64).repeat(x.shape[0], 1, 1)
-
-
-
-
-

@@ -1,5 +1,6 @@
 import torch
-from cbftorch.utils.dynamics import AffineInControlDynamics
+from .base import AffineInControlDynamics
+
 
 class DIDynamics(AffineInControlDynamics):
     def _f(self, x):
@@ -12,8 +13,3 @@ class DIDynamics(AffineInControlDynamics):
         return (torch.vstack([torch.zeros(2, 2, dtype=torch.float64),
                               torch.eye(2, dtype=torch.float64)])
                 ).repeat(x.shape[0], 1, 1)
-
-
-
-
-

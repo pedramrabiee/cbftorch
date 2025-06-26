@@ -1,6 +1,6 @@
 from unicycle_desired_control import desired_control
 from map_config import map_config
-from unicycle_dynamics import UnicycleDynamics
+from cbftorch.dynamics import UnicycleDynamics
 from utils.dynamics import LowPassFilterDynamics
 from cbftorch.barriers.barrier import Barrier
 from cbftorch.safe_controls.closed_form_safe_control import MinIntervInputConstCFSafeControl

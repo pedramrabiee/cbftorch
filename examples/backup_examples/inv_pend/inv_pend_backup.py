@@ -3,7 +3,7 @@
 from box import Box as AD
 import matplotlib as mpl
 from math import pi
-from inv_pend_dynamics import InvertPendDynamics
+from cbftorch.dynamics import InvertPendDynamics
 from map_config import map_config
 from cbftorch.barriers.backup_barrier import BackupBarrier
 from cbftorch.utils.make_map import Map

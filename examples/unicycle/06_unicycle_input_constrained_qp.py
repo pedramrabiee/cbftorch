@@ -1,7 +1,7 @@
 from box import Box as AD
 import matplotlib as mpl
 from math import pi
-from unicycle_dynamics import UnicycleDynamics
+from cbftorch.dynamics import UnicycleDynamics
 from cbftorch.utils.make_map import Map
 from map_config import map_config
 from unicycle_desired_control import desired_control

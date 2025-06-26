@@ -2,7 +2,7 @@ from cbftorch.utils.utils import *
 import torch
 from torch.nn.functional import softplus, relu
 from box import Box as AD
-from cbftorch.utils.dynamics import AffineInControlDynamics
+from cbftorch.dynamics import AffineInControlDynamics
 from cbftorch.barriers.composite_barrier import SoftCompositionBarrier
 from cbftorch.safe_controls.base_safe_control import BaseSafeControl, BaseMinIntervSafeControl
 

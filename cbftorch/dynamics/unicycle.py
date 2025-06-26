@@ -1,5 +1,5 @@
 import torch
-from cbftorch.utils.dynamics import AffineInControlDynamics
+from .base import AffineInControlDynamics
 
 
 class UnicycleDynamics(AffineInControlDynamics):

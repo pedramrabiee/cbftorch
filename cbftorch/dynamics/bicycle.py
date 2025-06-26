@@ -1,5 +1,6 @@
 import torch
-from cbftorch.utils.dynamics import AffineInControlDynamics
+from .base import AffineInControlDynamics
+
 
 class BicycleDynamics(AffineInControlDynamics):
     def _f(self, x):
@@ -15,8 +16,3 @@ class BicycleDynamics(AffineInControlDynamics):
                               torch.hstack([torch.zeros(*x.shape[:-1], 1, dtype=torch.float64),
                                             x[:, 2:3] / self._params.l])], dim=1)
                 )
-
-
-
-
-
