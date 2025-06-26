@@ -65,7 +65,7 @@ dynamics = InvertPendDynamics()
 
 
 # Make barrier from map_
-map_ = Map(barriers_info=map_config2, dynamics=dynamics, cfg=cfg)
+map_ = Map(dynamics=dynamics, cfg=cfg, barriers_info=map_config2)
 
 state_barrier = map_.barrier
 

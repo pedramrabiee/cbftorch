@@ -34,7 +34,7 @@ cfg = AD(softmax_rho=20,
 dynamics = UnicycleDynamics()
 
 # Make barrier from map_
-map_ = Map(barriers_info=map_config, dynamics=dynamics, cfg=cfg)
+map_ = Map(dynamics=dynamics, cfg=cfg, barriers_info=map_config)
 
 # Make safety filter and assign dynamics and barrier
 safety_filter = MinIntervCFSafeControl(

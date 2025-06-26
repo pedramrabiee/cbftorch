@@ -1,7 +1,7 @@
 from unicycle_desired_control import desired_control
 from map_config import map_config
 from cbftorch.dynamics import UnicycleDynamics
-from utils.dynamics import LowPassFilterDynamics
+from cbftorch.dynamics import LowPassFilterDynamics
 from cbftorch.barriers.barrier import Barrier
 from cbftorch.safe_controls.closed_form_safe_control import MinIntervInputConstCFSafeControl
 from box import Box as AD
@@ -35,7 +35,7 @@ cfg = AD(softmax_rho=20,
 state_dynamics = UnicycleDynamics()
 
 # make position and velocity barrer
-map_ = Map(barriers_info=map_config, dynamics=state_dynamics, cfg=cfg)
+map_ = Map(dynamics=state_dynamics, cfg=cfg, barriers_info=map_config)
 pos_barrier, vel_barrier = map_.get_barriers()
 
 # make action dynamics

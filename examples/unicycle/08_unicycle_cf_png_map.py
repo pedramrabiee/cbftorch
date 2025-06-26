@@ -45,7 +45,7 @@ dynamics = UnicycleDynamics()
 # Make barrier from map image
 current_root = os.getcwd()
 map_path = os.path.join(current_root, 'map.png')
-map_ = Map(map_config2, dynamics=dynamics, cfg=cfg)
+map_ = Map(dynamics=dynamics, cfg=cfg, barriers_info=map_config2)
 
 print('map created successfully')
 

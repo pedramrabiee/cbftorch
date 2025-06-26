@@ -75,7 +75,7 @@ dynamics = UnicycleReducedOrderDynamics(params=dynamics_param)
 
 
 # Make barrier from map_
-map_ = Map(barriers_info=map_config, dynamics=dynamics, cfg=map_cfg)
+map_ = Map(dynamics=dynamics, cfg=map_cfg, barriers_info=map_config)
 
 state_barrier= map_.barrier
 

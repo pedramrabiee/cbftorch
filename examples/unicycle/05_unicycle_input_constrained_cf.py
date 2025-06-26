@@ -31,7 +31,7 @@ cfg = AD(softmax_rho=20,
 state_dynamics = UnicycleDynamics()
 
 # make position and velocity barrer
-map_ = Map(barriers_info=map_config, dynamics=state_dynamics, cfg=cfg)
+map_ = Map(dynamics=state_dynamics, cfg=cfg, barriers_info=map_config)
 pos_barrier, vel_barrier = map_.get_barriers()
 
 # make action dynamics
