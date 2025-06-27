@@ -3,6 +3,7 @@ from box import Box as AD
 from cbftorch.barriers.barrier import Barrier
 from cbftorch.barriers.composite_barrier import SoftCompositionBarrier, NonSmoothCompositionBarrier
 from cbftorch.utils.utils import *
+from cbftorch.config import DEFAULT_DTYPE
 import cv2
 
 
@@ -81,8 +82,8 @@ class ImageGeometryProvider(GeometryProvider):
         bnd_points, safe_points = self._sample_from_image(**params)
         points_cat = torch.cat([bnd_points, safe_points])
         labels = torch.cat([
-            -torch.ones(bnd_points.shape[0], dtype=torch.float64),
-            torch.ones(safe_points.shape[0], dtype=torch.float64)
+            -torch.ones(bnd_points.shape[0], dtype=DEFAULT_DTYPE),
+            torch.ones(safe_points.shape[0], dtype=DEFAULT_DTYPE)
         ]).unsqueeze(-1)
 
         self._barrier_func = SVM(self.synthesis_cfg).fit(points_cat, labels)
@@ -121,7 +122,7 @@ class ImageGeometryProvider(GeometryProvider):
                     y = (height - point[0][1]) / pixels_per_meter
                     safe_points.append([x, y])
 
-        return torch.tensor(obstacle_points, dtype=torch.float64), torch.tensor(safe_points, dtype=torch.float64)
+        return torch.tensor(obstacle_points, dtype=DEFAULT_DTYPE), torch.tensor(safe_points, dtype=DEFAULT_DTYPE)
 
 
 class Map:

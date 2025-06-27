@@ -17,12 +17,12 @@ class UnicycleReducedOrderDynamics(AffineInControlDynamics):
 
     def _g(self, x):
         return torch.stack([
-        torch.stack([torch.zeros_like(x[:, 0]),
-                    torch.zeros_like(x[:, 0], dtype=torch.float64),
-                    torch.ones_like(x[:, 0], dtype=torch.float64),
-                    torch.zeros_like(x[:, 0], dtype=torch.float64)], dim=-1),
-        torch.stack([-self.d * torch.sin(x[:, 3]),
-                    self.d * torch.cos(x[:, 3]),
-                    torch.zeros_like(x[:, 0], dtype=torch.float64),
-                    torch.ones_like(x[:, 0], dtype=torch.float64)], dim=-1)
-    ], dim=-1)
+            torch.stack([torch.zeros_like(x[:, 0]),
+                         torch.zeros_like(x[:, 0]),
+                         torch.ones_like(x[:, 0]),
+                         torch.zeros_like(x[:, 0])], dim=-1),
+            torch.stack([-self.d * torch.sin(x[:, 3]),
+                         self.d * torch.cos(x[:, 3]),
+                         torch.zeros_like(x[:, 0]),
+                         torch.ones_like(x[:, 0])], dim=-1)
+        ], dim=-1)

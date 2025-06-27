@@ -83,6 +83,28 @@ brew install --cask mactex
 - **PyTorch Integration**: GPU acceleration and automatic differentiation
 - **Input Constraints**: Handle control input limits through augmented dynamics
 
+## Configuration
+
+### Precision Control
+
+CBFTorch uses double precision (float64) by default for numerical stability in barrier function computations. You can change the default precision:
+
+```python
+import torch
+import cbftorch
+
+# Check current default dtype
+print(cbftorch.get_default_dtype())  # torch.float64
+
+# Use single precision (faster but less accurate)
+cbftorch.set_default_dtype(torch.float32)
+
+# Use double precision (default, recommended for CBF methods)
+cbftorch.set_default_dtype(torch.float64)
+```
+
+**Note**: CBF methods often require high numerical precision. Use float32 only if you understand the precision requirements of your specific application.
+
 ### Barrier Class
 
 The `Barrier` class represents a basic barrier function with methods for assigning barrier functions, dynamics, and computing barrier values.

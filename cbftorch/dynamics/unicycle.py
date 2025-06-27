@@ -1,5 +1,6 @@
 import torch
 from .base import AffineInControlDynamics
+from cbftorch.config import DEFAULT_DTYPE
 
 
 class UnicycleDynamics(AffineInControlDynamics):
@@ -15,10 +16,9 @@ class UnicycleDynamics(AffineInControlDynamics):
                             torch.zeros_like(x[:, 0])], dim=-1)
 
     def _g(self, x):
-        return (torch.vstack([torch.zeros(2, 2, dtype=torch.float64),
-                              torch.eye(2, dtype=torch.float64)])
+        return (torch.vstack([torch.zeros(2, 2, dtype=DEFAULT_DTYPE),
+                              torch.eye(2, dtype=DEFAULT_DTYPE)])
                 ).repeat(x.shape[0], 1, 1)
-
 
     def get_pos(self, x):
         return x[..., 0:2]

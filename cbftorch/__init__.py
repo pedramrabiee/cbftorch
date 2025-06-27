@@ -71,3 +71,8 @@ __all__ = [
     "UnicycleReducedOrderDynamics",
     "InvertPendDynamics",
 ]
+
+# Import configuration functions
+from .config import get_default_dtype, set_default_dtype
+
+__all__.extend(["get_default_dtype", "set_default_dtype"])

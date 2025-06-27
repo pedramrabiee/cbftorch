@@ -1,4 +1,6 @@
 import torch
+
+from cbftorch.config import DEFAULT_DTYPE
 from cbftorch.utils.utils import vectorize_tensors
 
 
@@ -6,9 +8,9 @@ class AffineInControlDynamics:
     def __init__(self, params=None, **kwargs):
         self._params = params
         if "state_dim" in kwargs:
-            self._state_dim = kwargs['state_dim']
+            self._state_dim = kwargs["state_dim"]
         if "action_dim" in kwargs:
-            self._action_dim = kwargs['action_dim']
+            self._action_dim = kwargs["action_dim"]
 
     @property
     def state_dim(self):
@@ -101,12 +103,14 @@ class AffineInControlDynamics:
 
 class LowPassFilterDynamics(AffineInControlDynamics):
     def __init__(self, params, state_dim, action_dim):
-        assert state_dim == action_dim, 'state_dim and action_dim should be the same'
+        assert state_dim == action_dim, "state_dim and action_dim should be the same"
         super().__init__(params=params, state_dim=state_dim, action_dim=action_dim)
-        assert params is not None, 'params should include low pass filter gains'
-        assert len(params['gains']) == state_dim, 'gains should be a list of gains of length state_dim'
+        assert params is not None, "params should include low pass filter gains"
+        assert (
+                len(params["gains"]) == state_dim
+        ), "gains should be a list of gains of length state_dim"
 
-        self._gains = torch.tensor(params['gains'], dtype=torch.float64)
+        self._gains = torch.tensor(params["gains"], dtype=torch.float64)
         self._gains_mat = torch.diag(self._gains)
         self._gains.unsqueeze_(0)
 
@@ -114,4 +118,5 @@ class LowPassFilterDynamics(AffineInControlDynamics):
         return -self._gains * x
 
     def _g(self, x):
+        return self._gains_mat.repeat(x.shape[0], 1, 1)
         return self._gains_mat.repeat(x.shape[0], 1, 1)
