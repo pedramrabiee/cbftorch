@@ -11,6 +11,9 @@ import datetime
 import matplotlib.pyplot as plt
 from cbftorch.safe_controls.qp_safe_control import MinIntervQPSafeControl
 from cbftorch.utils.utils import *
+import matplotlib
+matplotlib.use('TkAgg')
+
 
 mpl.rcParams['text.usetex'] = True
 mpl.rcParams['font.family'] = 'serif'

@@ -1,0 +1,159 @@
+{
+  "metadata": {
+    "timestamp": "2025-07-11 13:50:19",
+    "torch_version": "2.7.1+cu126",
+    "device": "cuda",
+    "mode": "quick",
+    "baseline_only": false
+  },
+  "basic_performance": {
+    "rel_deg_1": {
+      "batch_1": {
+        "barrier_time": 4.7192395140882584e-05,
+        "hocbf_time": 3.940709575545043e-05,
+        "lie_derivs_time": 2.7786399004980922e-05,
+        "overhead_vs_barrier": -16.496936343643597,
+        "time_per_sample": 3.940709575545043e-05,
+        "memory_delta_mb": 0.0,
+        "batch_size": 1
+      },
+      "batch_10": {
+        "barrier_time": 2.3465201957151292e-05,
+        "hocbf_time": 2.3906101705506445e-05,
+        "lie_derivs_time": 2.4137398577295242e-05,
+        "overhead_vs_barrier": 1.8789514326800205,
+        "time_per_sample": 2.3906101705506446e-06,
+        "memory_delta_mb": 0.0,
+        "batch_size": 10
+      },
+      "batch_50": {
+        "barrier_time": 2.5405202177353203e-05,
+        "hocbf_time": 2.7030901401303707e-05,
+        "lie_derivs_time": 2.3877600324340164e-05,
+        "overhead_vs_barrier": 6.399080049044792,
+        "time_per_sample": 5.406180280260741e-07,
+        "memory_delta_mb": 0.0,
+        "batch_size": 50
+      }
+    },
+    "rel_deg_2": {
+      "batch_1": {
+        "barrier_time": 2.435409987810999e-05,
+        "hocbf_time": 0.00023702340113231912,
+        "lie_derivs_time": 2.5770399952307342e-05,
+        "overhead_vs_barrier": 873.2381911817691,
+        "time_per_sample": 0.00023702340113231912,
+        "memory_delta_mb": 0.0,
+        "batch_size": 1
+      },
+      "batch_10": {
+        "barrier_time": 2.629150403663516e-05,
+        "hocbf_time": 0.00023661859740968793,
+        "lie_derivs_time": 2.739940246101469e-05,
+        "overhead_vs_barrier": 799.9812147680041,
+        "time_per_sample": 2.3661859740968792e-05,
+        "memory_delta_mb": 0.0,
+        "batch_size": 10
+      },
+      "batch_50": {
+        "barrier_time": 2.7115101693198086e-05,
+        "hocbf_time": 0.00024817379890009763,
+        "lie_derivs_time": 2.726680540945381e-05,
+        "overhead_vs_barrier": 815.2604393969611,
+        "time_per_sample": 4.963475978001952e-06,
+        "memory_delta_mb": 0.0,
+        "batch_size": 50
+      }
+    },
+    "rel_deg_3": {
+      "batch_1": {
+        "barrier_time": 2.487379970261827e-05,
+        "hocbf_time": 0.0008961456987890415,
+        "lie_derivs_time": 2.8125199605710804e-05,
+        "overhead_vs_barrier": 3502.7696190490396,
+        "time_per_sample": 0.0008961456987890415,
+        "memory_delta_mb": 0.0,
+        "batch_size": 1
+      },
+      "batch_10": {
+        "barrier_time": 2.4572999973315745e-05,
+        "hocbf_time": 0.0008881740999640897,
+        "lie_derivs_time": 3.0090392101556063e-05,
+        "overhead_vs_barrier": 3514.4308831993394,
+        "time_per_sample": 8.881740999640896e-05,
+        "memory_delta_mb": 0.0,
+        "batch_size": 10
+      },
+      "batch_50": {
+        "barrier_time": 2.5061602354981005e-05,
+        "hocbf_time": 0.0008900815024389886,
+        "lie_derivs_time": 2.6768798124976457e-05,
+        "overhead_vs_barrier": 3451.574595397267,
+        "time_per_sample": 1.780163004877977e-05,
+        "memory_delta_mb": 0.25,
+        "batch_size": 50
+      }
+    }
+  },
+  "optimization_targets": {
+    "gradient_redundancy": {
+      "batch_1": {
+        "combined_time": 2.448340237606317e-05,
+        "separate_time": 0.00027443839935585855,
+        "inefficiency_factor": 11.209161012040154,
+        "potential_savings_percent": 91.07872570546658
+      },
+      "batch_10": {
+        "combined_time": 2.33272003242746e-05,
+        "separate_time": 0.0002810009988024831,
+        "inefficiency_factor": 12.046066175805489,
+        "potential_savings_percent": 91.69853472988137
+      },
+      "batch_50": {
+        "combined_time": 2.494300133548677e-05,
+        "separate_time": 0.00029537139635067434,
+        "inefficiency_factor": 11.841854650043464,
+        "potential_savings_percent": 91.55537684296498
+      },
+      "batch_100": {
+        "combined_time": 2.4762802058830858e-05,
+        "separate_time": 0.0003031794010894373,
+        "inefficiency_factor": 12.243339843736226,
+        "potential_savings_percent": 91.83229402464389
+      }
+    },
+    "multiple_barriers": {
+      "barriers_1": {
+        "total_time": 6.610840791836381e-05,
+        "time_per_barrier": 6.610840791836381e-05,
+        "num_barriers": 1
+      },
+      "barriers_5": {
+        "total_time": 0.00014496260264422743,
+        "time_per_barrier": 2.8992520528845487e-05,
+        "num_barriers": 5
+      },
+      "barriers_10": {
+        "total_time": 0.0002510827995138243,
+        "time_per_barrier": 2.510827995138243e-05,
+        "num_barriers": 10
+      }
+    },
+    "simulation": {
+      "total_time": 0.00023309199896175413,
+      "time_per_step": 1.1654599948087707e-05,
+      "steps": 20
+    }
+  },
+  "summary": {
+    "avg_barrier_time_us": 27.592434101582814,
+    "avg_hocbf_time_us": 387.3956886107205,
+    "avg_lie_derivs_time_us": 26.802488395737278,
+    "hocbf_vs_barrier_overhead": 1303.9924393205235,
+    "total_tests": 9,
+    "optimization_opportunities": {
+      "gradient_inefficiency_factor": 11.835105420406332,
+      "potential_time_savings_percent": 91.5412328257392
+    }
+  }
+}

@@ -76,7 +76,8 @@ class MultiBarriers(Barrier):
         return torch.min(self.barrier(x), dim=-2).values
 
     def get_hocbf_and_lie_derivs(self, x):
-        return self.get_hocbf_and_lie_derivs_v2(x)
+        # Use optimized individual calls that leverage caching
+        return self.hocbf(x).detach(), self.Lf_hocbf(x), self.Lg_hocbf(x)
 
     @property
     def barriers_flatten(self):

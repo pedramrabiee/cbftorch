@@ -1,0 +1,159 @@
+{
+  "metadata": {
+    "timestamp": "2025-07-11 13:47:35",
+    "torch_version": "2.7.1+cu126",
+    "device": "cuda",
+    "mode": "quick",
+    "baseline_only": false
+  },
+  "basic_performance": {
+    "rel_deg_1": {
+      "batch_1": {
+        "barrier_time": 0.00011758810433093458,
+        "hocbf_time": 0.00010055539605673403,
+        "lie_derivs_time": 0.0008059462066739798,
+        "overhead_vs_barrier": -14.485060687996532,
+        "time_per_sample": 0.00010055539605673403,
+        "memory_delta_mb": 0.0,
+        "batch_size": 1
+      },
+      "batch_10": {
+        "barrier_time": 7.946250261738896e-05,
+        "hocbf_time": 8.063150016823784e-05,
+        "lie_derivs_time": 0.0006227411970030517,
+        "overhead_vs_barrier": 1.4711310521864362,
+        "time_per_sample": 8.063150016823783e-06,
+        "memory_delta_mb": 0.0,
+        "batch_size": 10
+      },
+      "batch_50": {
+        "barrier_time": 7.427660311805084e-05,
+        "hocbf_time": 2.3880902153905482e-05,
+        "lie_derivs_time": 0.0002695159986615181,
+        "overhead_vs_barrier": -67.84868834678588,
+        "time_per_sample": 4.776180430781097e-07,
+        "memory_delta_mb": 0.0,
+        "batch_size": 50
+      }
+    },
+    "rel_deg_2": {
+      "batch_1": {
+        "barrier_time": 2.1317802020348608e-05,
+        "hocbf_time": 0.00020030800078529865,
+        "lie_derivs_time": 0.0006714690010994673,
+        "overhead_vs_barrier": 839.6278312093219,
+        "time_per_sample": 0.00020030800078529865,
+        "memory_delta_mb": 0.0,
+        "batch_size": 1
+      },
+      "batch_10": {
+        "barrier_time": 2.1982997714076193e-05,
+        "hocbf_time": 0.00020270539971534163,
+        "lie_derivs_time": 0.0007070622028550133,
+        "overhead_vs_barrier": 822.1008087788906,
+        "time_per_sample": 2.027053997153416e-05,
+        "memory_delta_mb": 0.0,
+        "batch_size": 10
+      },
+      "batch_50": {
+        "barrier_time": 2.228239900432527e-05,
+        "hocbf_time": 0.00021045539469923824,
+        "lie_derivs_time": 0.0007892419991549105,
+        "overhead_vs_barrier": 844.4916351169657,
+        "time_per_sample": 4.2091078939847645e-06,
+        "memory_delta_mb": 0.0,
+        "batch_size": 50
+      }
+    },
+    "rel_deg_3": {
+      "batch_1": {
+        "barrier_time": 2.390899899182841e-05,
+        "hocbf_time": 0.0008476195987896062,
+        "lie_derivs_time": 0.0022836892050690947,
+        "overhead_vs_barrier": 3445.190658460041,
+        "time_per_sample": 0.0008476195987896062,
+        "memory_delta_mb": 0.0,
+        "batch_size": 1
+      },
+      "batch_10": {
+        "barrier_time": 2.4525199842173605e-05,
+        "hocbf_time": 0.0009127863988396712,
+        "lie_derivs_time": 0.0024375595996389164,
+        "overhead_vs_barrier": 3621.830626105811,
+        "time_per_sample": 9.127863988396712e-05,
+        "memory_delta_mb": 0.0,
+        "batch_size": 10
+      },
+      "batch_50": {
+        "barrier_time": 2.5869700766634197e-05,
+        "hocbf_time": 0.0009048207983141765,
+        "lie_derivs_time": 0.0023926608002511783,
+        "overhead_vs_barrier": 3397.6082888487895,
+        "time_per_sample": 1.809641596628353e-05,
+        "memory_delta_mb": 0.0,
+        "batch_size": 50
+      }
+    }
+  },
+  "optimization_targets": {
+    "gradient_redundancy": {
+      "batch_1": {
+        "combined_time": 0.0007339283969486132,
+        "separate_time": 0.0015285373956430703,
+        "inefficiency_factor": 2.082679185051471,
+        "potential_savings_percent": 51.98492368975752
+      },
+      "batch_10": {
+        "combined_time": 0.0007489129988243803,
+        "separate_time": 0.001530560600804165,
+        "inefficiency_factor": 2.0437094872258728,
+        "potential_savings_percent": 51.069366451031264
+      },
+      "batch_50": {
+        "combined_time": 0.0007755118014756591,
+        "separate_time": 0.0015502449969062582,
+        "inefficiency_factor": 1.998996010062544,
+        "potential_savings_percent": 49.97488764528788
+      },
+      "batch_100": {
+        "combined_time": 0.0007860007986892015,
+        "separate_time": 0.0015953894006088376,
+        "inefficiency_factor": 2.029755444612064,
+        "potential_savings_percent": 50.732981027124445
+      }
+    },
+    "multiple_barriers": {
+      "barriers_1": {
+        "total_time": 6.285480048973113e-05,
+        "time_per_barrier": 6.285480048973113e-05,
+        "num_barriers": 1
+      },
+      "barriers_5": {
+        "total_time": 0.00013644680147990585,
+        "time_per_barrier": 2.728936029598117e-05,
+        "num_barriers": 5
+      },
+      "barriers_10": {
+        "total_time": 0.00023543519782833754,
+        "time_per_barrier": 2.3543519782833753e-05,
+        "num_barriers": 10
+      }
+    },
+    "simulation": {
+      "total_time": 0.01429410559940152,
+      "time_per_step": 0.0007147052799700759,
+      "steps": 20
+    }
+  },
+  "summary": {
+    "avg_barrier_time_us": 45.69047871175118,
+    "avg_hocbf_time_us": 387.0848210580233,
+    "avg_lie_derivs_time_us": 1219.9873567119034,
+    "hocbf_vs_barrier_overhead": 747.1892437372702,
+    "total_tests": 9,
+    "optimization_opportunities": {
+      "gradient_inefficiency_factor": 2.038785031737988,
+      "potential_time_savings_percent": 50.940539703300274
+    }
+  }
+}

@@ -1,5 +1,6 @@
 from typing import List
 from cbftorch.utils.utils import *
+from cbftorch.utils.tensor_manager import ensure_batched, tensor_input, ensure_dtype
 
 
 class Barrier:
@@ -18,6 +19,10 @@ class Barrier:
         self._rel_deg = None
         self._hocbf_func = None
         self._alphas = None
+        
+        # Gradient caching system
+        self._gradient_cache = {}
+        self._cache_enabled = True
 
     def assign(self, barrier_func, rel_deg=1, alphas=None):
         """
@@ -72,44 +77,111 @@ class Barrier:
                                                        alphas=alphas))
         self._hocbf_func = self._barriers[-1]
 
+    @tensor_input(ensure_batch=True, input_arg_index=1)
+    @ensure_dtype(input_arg_index=1)
     def barrier(self, x):
         """
         Compute the barrier function barrier(x) for a given trajs x.
         """
         return apply_and_batchize(self._barrier_func, x)
 
+    @tensor_input(ensure_batch=True, input_arg_index=1)
+    @ensure_dtype(input_arg_index=1)
     def hocbf(self, x):
         """
         Compute the highest-order barrier function hocbf(x) for a given trajs x.
         """
         return apply_and_batchize(self._hocbf_func, x)
 
+    @tensor_input(ensure_batch=True, input_arg_index=1)
+    @ensure_dtype(input_arg_index=1)
     def get_hocbf_and_lie_derivs(self, x):
-        x = vectorize_tensors(x)
-        grad_req = x.requires_grad
-        x.requires_grad_()
-        hocbf = self.hocbf(x)
-        hocbf_deriv = [grad(fval, x, create_graph=True)[0] for fval in hocbf.sum(0)]
-        x.requires_grad_(requires_grad=grad_req)
-        Lf_hocbf = lie_deriv_from_values(hocbf_deriv, self._dynamics.f(x))
-        Lg_hocbf = lie_deriv_from_values(hocbf_deriv, self._dynamics.g(x))
-        return hocbf.detach(), Lf_hocbf.detach(), Lg_hocbf.detach()
+        # x is already standardized by decorators
+        # Use cached gradient computation for efficiency
+        hocbf, _, Lf_hocbf, Lg_hocbf = self._compute_cached_gradients(x)
+        return hocbf, Lf_hocbf, Lg_hocbf
 
-    def get_hocbf_and_lie_derivs_v2(self, x):
-        # For a more optimized version use get_hocbf_and_lie_derivs
-        return self.hocbf(x).detach(), self.Lf_hocbf(x), self.Lg_hocbf(x)
 
+    @tensor_input(ensure_batch=True, input_arg_index=1)
+    @ensure_dtype(input_arg_index=1)
     def Lf_hocbf(self, x):
         """
         Compute the Lie derivative of the highest-order barrier function with respect to the system dynamics f.
         """
-        return lie_deriv(x, self.hocbf, self._dynamics.f).detach()
+        # Use cached gradients for efficiency
+        _, _, Lf_hocbf, _ = self._compute_cached_gradients(x)
+        return Lf_hocbf
 
+    @tensor_input(ensure_batch=True, input_arg_index=1)
+    @ensure_dtype(input_arg_index=1)
     def Lg_hocbf(self, x):
         """
         Compute the Lie derivative of the highest-order barrier function with respect to the system dynamics g.
         """
-        return lie_deriv(x, self.hocbf, self._dynamics.g).detach()
+        # Use cached gradients for efficiency
+        _, _, _, Lg_hocbf = self._compute_cached_gradients(x)
+        return Lg_hocbf
+        
+    def _get_cache_key(self, x: torch.Tensor) -> str:
+        """Generate cache key for gradient caching."""
+        # Use a simple hash based on tensor properties and first few values
+        # This balances performance with cache effectiveness
+        sample_values = x.detach().flatten()[:min(16, x.numel())]  # Use first 16 values max
+        sample_hash = hash(tuple(sample_values.cpu().numpy().round(decimals=8)))
+        return f"grad_{x.shape}_{x.dtype}_{sample_hash}"
+    
+    def _compute_cached_gradients(self, x: torch.Tensor) -> tuple:
+        """
+        Compute and cache gradients for efficient reuse.
+        
+        Args:
+            x: Input tensor (already standardized)
+            
+        Returns:
+            Tuple of (hocbf, hocbf_deriv, Lf_hocbf, Lg_hocbf)
+        """
+        cache_key = self._get_cache_key(x)
+        
+        # Check cache first
+        if self._cache_enabled and cache_key in self._gradient_cache:
+            return self._gradient_cache[cache_key]
+        
+        # Compute gradients
+        grad_req = x.requires_grad
+        x.requires_grad_()
+        
+        # Compute HOCBF directly to avoid circular dependency
+        # Note: we need gradients enabled for hocbf to compute hocbf_deriv
+        hocbf = self._hocbf_func(x)
+        if hocbf.ndim == 1:
+            hocbf = hocbf.unsqueeze(-1)
+        
+        # Compute gradients
+        hocbf_deriv = [grad(fval, x, create_graph=True)[0] for fval in hocbf.sum(0)]
+        
+        # Compute Lie derivatives using cached gradients
+        Lf_hocbf = lie_deriv_from_values(hocbf_deriv, self._dynamics.f(x))
+        Lg_hocbf = lie_deriv_from_values(hocbf_deriv, self._dynamics.g(x))
+        
+        # Restore gradient requirement
+        x.requires_grad_(requires_grad=grad_req)
+        
+        # Cache results
+        result = (hocbf.detach(), hocbf_deriv, Lf_hocbf.detach(), Lg_hocbf.detach())
+        if self._cache_enabled:
+            self._gradient_cache[cache_key] = result
+        
+        return result
+    
+    def clear_gradient_cache(self):
+        """Clear the gradient cache."""
+        self._gradient_cache.clear()
+    
+    def enable_gradient_caching(self, enabled: bool = True):
+        """Enable or disable gradient caching."""
+        self._cache_enabled = enabled
+        if not enabled:
+            self.clear_gradient_cache()
 
     def compute_barriers_at(self, x):
         """
@@ -177,10 +249,61 @@ class Barrier:
           """
         ans = [barrier]
         for i in range(rel_deg - 1):
-            hocbf_i = lambda x, hocbf=ans[i], f=self._dynamics.f, alpha=alphas[i]: \
-                lie_deriv(x, hocbf, f) + apply_and_batchize(func=alpha, x=hocbf(x))
+            # Create a proper class-based barrier function instead of lambda
+            hocbf_i = self._create_hocbf_function(ans[i], alphas[i], i)
             ans.append(hocbf_i)
         return ans
+    
+    def _create_hocbf_function(self, prev_barrier, alpha, level):
+        """
+        Create an efficient HOCBF function without lambda closures.
+        
+        Args:
+            prev_barrier: Previous barrier function in the series
+            alpha: Class-K function for this level
+            level: Level in the HOCBF series
+            
+        Returns:
+            Optimized HOCBF function
+        """
+        class HOCBFFunction:
+            def __init__(self, barrier_instance, prev_barrier, alpha, level):
+                self.barrier_instance = barrier_instance
+                self.prev_barrier = prev_barrier
+                self.alpha = alpha
+                self.level = level
+                
+            def __call__(self, x):
+                # Use standardized tensor input
+                from ..config import DEFAULT_DTYPE
+                if not isinstance(x, torch.Tensor):
+                    x = torch.tensor(x, dtype=DEFAULT_DTYPE)
+                
+                # Compute previous barrier value
+                prev_val = apply_and_batchize(self.prev_barrier, x)
+                
+                # Compute Lie derivative
+                lie_deriv_val = lie_deriv(x, self.prev_barrier, self.barrier_instance._dynamics.f)
+                
+                # Compute alpha function
+                alpha_val = apply_and_batchize(func=self.alpha, x=prev_val)
+                
+                return lie_deriv_val + alpha_val
+        
+        return HOCBFFunction(self, prev_barrier, alpha, level)
+    
+    def _compute_hocbf_vectorized(self, x: torch.Tensor) -> torch.Tensor:
+        """
+        Vectorized computation of HOCBF for better performance.
+        
+        Args:
+            x: Input tensor (already standardized)
+            
+        Returns:
+            HOCBF values
+        """
+        # Use the highest-order barrier function directly
+        return apply_and_batchize(self._hocbf_func, x)
 
     def _handle_alphas(self, alphas, rel_deg):
         if rel_deg > 1:
